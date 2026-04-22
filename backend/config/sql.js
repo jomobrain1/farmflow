@@ -3,8 +3,12 @@ const INSERT_USER_SQL =
   "INSERT INTO users (name, email,  password) VALUES (?, ?, ? )";
 
 const USER_LOGIN_EXIST_SQL = "SELECT * FROM users WHERE name=? OR email=?";
+
+const USER_INFO_SQL = "SELECT id, name, email FROM users WHERE id = ?";
+
 module.exports = {
   USER_EXISTS_SQL,
   INSERT_USER_SQL,
   USER_LOGIN_EXIST_SQL,
+  USER_INFO_SQL,
 };

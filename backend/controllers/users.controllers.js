@@ -5,6 +5,7 @@ const {
   USER_EXISTS_SQL,
   INSERT_USER_SQL,
   USER_LOGIN_EXIST_SQL,
+  USER_INFO_SQL,
 } = require("../config/sql");
 const sendResponse = require("../config/response");
 const { JWT_SECRET, JWT_EXPIRES } = require("../config/constants");
@@ -71,4 +72,21 @@ const loginUsers = async (req, res) => {
     return sendResponse(res, 500, false, "user login error");
   }
 };
-module.exports = { registerUsers, loginUsers };
+
+// get current user
+const getCurrentUser = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const [users] = await db.query(USER_INFO_SQL, [user_id]);
+
+    if (users.length === 0) {
+      return sendResponse(res, 404, false, "User not found");
+    }
+
+    return res.json(users[0]);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, false, "Server error");
+  }
+};
+module.exports = { registerUsers, loginUsers, getCurrentUser };

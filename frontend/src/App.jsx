@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Fields from "./components/Fields";
 import CreateField from "./components/CreateField";
@@ -8,8 +8,12 @@ import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
+  const { user } = useContext(AuthContext);
+
   return (
     <BrowserRouter>
       <Navbar />
@@ -22,8 +26,11 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/" /> : <Signup />}
+        />
         <Route path="/fields" element={<Fields />} />
         <Route path="/fields/create" element={<CreateField />} />
         <Route path="/fields/edit/:id" element={<EditField />} />

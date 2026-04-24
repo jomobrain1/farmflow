@@ -199,6 +199,15 @@
   color: #171717;
 }
 
+.dashboard-empty {
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #e7e5e4;
+  border-radius: 0.45rem;
+  background: #fbfbfa;
+  color: #57534e;
+}
+
 @media (max-width: 900px) {
   .dashboard-stats,
   .field-grid {

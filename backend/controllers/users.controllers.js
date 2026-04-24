@@ -6,6 +6,7 @@ const {
   INSERT_USER_SQL,
   USER_LOGIN_EXIST_SQL,
   USER_INFO_SQL,
+  USERS_LIST_SQL,
 } = require("../config/sql");
 const sendResponse = require("../config/response");
 const { JWT_SECRET, JWT_EXPIRES } = require("../config/constants");
@@ -90,6 +91,16 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+const getUsersList = async (req, res) => {
+  try {
+    const [users] = await db.query(USERS_LIST_SQL);
+    return res.json(users);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, false, "Error fetching users");
+  }
+};
+
 const logoutUser = async (req, res) => {
   try {
     res.clearCookie("token", {
@@ -103,4 +114,10 @@ const logoutUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUsers, loginUsers, getCurrentUser, logoutUser };
+module.exports = {
+  registerUsers,
+  loginUsers,
+  getCurrentUser,
+  getUsersList,
+  logoutUser,
+};

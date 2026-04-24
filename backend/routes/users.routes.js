@@ -3,6 +3,7 @@ const {
   registerUsers,
   loginUsers,
   getCurrentUser,
+  getUsersList,
   logoutUser,
 } = require("../controllers/users.controllers");
 const auth = require("../middlewares/auth");

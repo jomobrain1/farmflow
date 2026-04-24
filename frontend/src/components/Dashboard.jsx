@@ -5,9 +5,8 @@ import { FieldContext } from "../context/FieldContext.jsx";
 
 function Dashboard() {
   const { fields, loadingFields } = useContext(FieldContext);
-  const needsReviewCount = fields.filter(
-    (field) => field.current_stage === "Flowering",
-  ).length;
+  const atRiskCount = fields.filter((field) => field.status === "At Risk").length;
+  const activeCount = fields.filter((field) => field.status === "Active").length;
 
   return (
     <main className="dashboard-page">
@@ -25,14 +24,12 @@ function Dashboard() {
           <strong className="dashboard-stat__value">{fields.length}</strong>
         </article>
         <article className="dashboard-stat">
-          <span className="dashboard-stat__label">Active stages</span>
-          <strong className="dashboard-stat__value">
-            {new Set(fields.map((field) => field.current_stage)).size}
-          </strong>
+          <span className="dashboard-stat__label">Active</span>
+          <strong className="dashboard-stat__value">{activeCount}</strong>
         </article>
         <article className="dashboard-stat">
-          <span className="dashboard-stat__label">Need review</span>
-          <strong className="dashboard-stat__value">{needsReviewCount}</strong>
+          <span className="dashboard-stat__label">At risk</span>
+          <strong className="dashboard-stat__value">{atRiskCount}</strong>
         </article>
       </section>
 
@@ -56,10 +53,20 @@ function Dashboard() {
                   <h3 className="field-card__title">{field.name}</h3>
                   <p className="field-card__subtitle">{field.crop_type}</p>
                 </div>
-                <span className="field-card__badge">{field.current_stage}</span>
+                <span
+                  className={`field-card__badge field-card__badge--${field.status
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`}
+                >
+                  {field.status}
+                </span>
               </div>
 
               <dl className="field-card__details">
+                <div className="field-card__row">
+                  <dt>Status</dt>
+                  <dd>{field.status}</dd>
+                </div>
                 <div className="field-card__row">
                   <dt>Stage</dt>
                   <dd>{field.current_stage}</dd>

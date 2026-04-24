@@ -9,6 +9,32 @@ const {
   DELETE_FIELD_SQL,
 } = require("../config/sql");
 
+const DAY_IN_MS = 1000 * 60 * 60 * 24;
+
+const getFieldStatus = (field) => {
+  if (field.current_stage === "Harvest") {
+    return "Completed";
+  }
+
+  const plantingDate = new Date(field.planting_date);
+  const today = new Date();
+  const ageInDays = Math.floor((today - plantingDate) / DAY_IN_MS);
+
+  if (
+    (field.current_stage === "Planted" && ageInDays > 14) ||
+    (field.current_stage === "Vegetative" && ageInDays > 45)
+  ) {
+    return "At Risk";
+  }
+
+  return "Active";
+};
+
+const withComputedStatus = (field) => ({
+  ...field,
+  status: getFieldStatus(field),
+});
+
 // create field (admin)
 const createField = async (req, res) => {
   try {
@@ -28,7 +54,7 @@ const createField = async (req, res) => {
     }
 
     // Inseart new field into DB
-    const field = await db.query(INSERT_FIELD_SQL, [
+    const [createdField] = await db.query(INSERT_FIELD_SQL, [
       name,
       crop_type,
       planting_date,
@@ -37,11 +63,17 @@ const createField = async (req, res) => {
       req.user.id,
     ]);
 
-    return res.status(201).json({
-      success: true,
-      message: "Field created successfully!",
-      data: field,
-    });
+    const [newFieldRows] = await db.query(GET_SINGLE_FIELD_SQL, [
+      createdField.insertId,
+    ]);
+
+    return sendResponse(
+      res,
+      201,
+      true,
+      "Field created successfully!",
+      withComputedStatus(newFieldRows[0]),
+    );
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, false, "Error creating field");
@@ -56,7 +88,7 @@ const getAllFields = async (req, res) => {
       return sendResponse(res, 404, false, "No fields found");
     }
 
-    return res.json(fields);
+    return res.json(fields.map(withComputedStatus));
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, false, "Error fetching fields");
@@ -86,7 +118,7 @@ const updateField = async (req, res) => {
     const updatedAssignedAgentId =
       assigned_agent_id ?? existingField.assigned_agent_id;
 
-    const [updatedField] = await db.query(UPDATE_FIELD_SQL, [
+    await db.query(UPDATE_FIELD_SQL, [
       updatedName,
       updatedCropType,
       updatedPlantingDate,
@@ -95,12 +127,14 @@ const updateField = async (req, res) => {
       id,
     ]);
 
+    const [updatedFieldRows] = await db.query(GET_SINGLE_FIELD_SQL, [id]);
+
     return sendResponse(
       res,
       200,
       true,
       "Field updated successfully!",
-      updatedField,
+      withComputedStatus(updatedFieldRows[0]),
     );
   } catch (error) {
     console.log(error);

@@ -139,6 +139,24 @@
   white-space: nowrap;
 }
 
+.field-card__badge--active {
+  border-color: #b7dfc7;
+  background: #eaf7ef;
+  color: #1f6b3b;
+}
+
+.field-card__badge--at-risk {
+  border-color: #efb3b3;
+  background: #fff0f0;
+  color: #b42318;
+}
+
+.field-card__badge--completed {
+  border-color: #cfd4dc;
+  background: #f3f4f6;
+  color: #374151;
+}
+
 .field-card__details {
   display: grid;
   gap: 0.7rem;

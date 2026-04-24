@@ -27,10 +27,24 @@ function Fields() {
                 <h3 className="field-card__title">{field.name}</h3>
                 <p className="field-card__subtitle">{field.crop_type}</p>
               </div>
-              <span className="field-card__badge">{field.current_stage}</span>
+              <span
+                className={`field-card__badge field-card__badge--${field.status
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}`}
+              >
+                {field.status}
+              </span>
             </div>
 
             <dl className="field-card__details">
+              <div className="field-card__row">
+                <dt>Status</dt>
+                <dd>{field.status}</dd>
+              </div>
+              <div className="field-card__row">
+                <dt>Stage</dt>
+                <dd>{field.current_stage}</dd>
+              </div>
               <div className="field-card__row">
                 <dt>Planting date</dt>
                 <dd>{field.planting_date?.slice(0, 10)}</dd>

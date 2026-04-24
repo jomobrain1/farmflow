@@ -44,12 +44,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:5000/api/v1/auth/logout",
+        {},
+        { withCredentials: true },
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setUser(null);
+    }
+  };
+
   useEffect(() => {
     fetchUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, fetchUser }}>
+    <AuthContext.Provider
+      value={{ user, setUser, loading, login, logout, fetchUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

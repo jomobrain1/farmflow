@@ -89,4 +89,18 @@ const getCurrentUser = async (req, res) => {
     return sendResponse(res, 500, false, "Server error");
   }
 };
-module.exports = { registerUsers, loginUsers, getCurrentUser };
+
+const logoutUser = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+    });
+
+    return sendResponse(res, 200, true, "Logout successful");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, false, "Logout error");
+  }
+};
+
+module.exports = { registerUsers, loginUsers, getCurrentUser, logoutUser };

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../assets/styles/NavbarStyle.css";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext.jsx";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useContext(AuthContext);
 
   const handleToggleMenu = () => {
     setIsMenuOpen((currentState) => !currentState);
@@ -11,6 +14,11 @@ function Navbar() {
 
   const handleCloseMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    handleCloseMenu();
   };
 
   return (
@@ -40,42 +48,58 @@ function Navbar() {
           className={`navbar__links${isMenuOpen ? " navbar__links--open" : ""}`}
           aria-label="Primary"
         >
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `navbar__link${isActive ? " navbar__link--active" : ""}`
-            }
-            onClick={handleCloseMenu}
-          >
-            Dashboard
-          </NavLink>
-          <NavLink
-            to="/fields"
-            className={({ isActive }) =>
-              `navbar__link${isActive ? " navbar__link--active" : ""}`
-            }
-            onClick={handleCloseMenu}
-          >
-            Fields
-          </NavLink>
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              `navbar__link${isActive ? " navbar__link--active" : ""}`
-            }
-            onClick={handleCloseMenu}
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/signup"
-            className={({ isActive }) =>
-              `navbar__link navbar__link--button${isActive ? " navbar__link--active" : ""}`
-            }
-            onClick={handleCloseMenu}
-          >
-            Sign Up
-          </NavLink>
+          {user ? (
+            <>
+              {" "}
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `navbar__link${isActive ? " navbar__link--active" : ""}`
+                }
+                onClick={handleCloseMenu}
+              >
+                Dashboard
+              </NavLink>
+              <NavLink
+                to="/fields"
+                className={({ isActive }) =>
+                  `navbar__link${isActive ? " navbar__link--active" : ""}`
+                }
+                onClick={handleCloseMenu}
+              >
+                Fields
+              </NavLink>
+              <button
+                type="button"
+                className="navbar__link navbar__link--button navbar__link--logout"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              {" "}
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  `navbar__link${isActive ? " navbar__link--active" : ""}`
+                }
+                onClick={handleCloseMenu}
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/signup"
+                className={({ isActive }) =>
+                  `navbar__link navbar__link--button${isActive ? " navbar__link--active" : ""}`
+                }
+                onClick={handleCloseMenu}
+              >
+                Sign Up
+              </NavLink>
+            </>
+          )}
         </nav>
       </div>
     </header>

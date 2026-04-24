@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const FieldContext = createContext(null);
 
@@ -33,12 +34,14 @@ export const FieldProvider = ({ children }) => {
       );
 
       await fetchFields();
+      toast.success(response.data?.message || "Field created successfully");
       return {
         success: true,
         message: response.data?.message || "Field created successfully",
       };
     } catch (error) {
       console.log(error);
+      toast.error(error.response?.data?.message || "Error creating field");
       return {
         success: false,
         message: error.response?.data?.message || "Error creating field",
@@ -55,15 +58,40 @@ export const FieldProvider = ({ children }) => {
       );
 
       await fetchFields();
+      toast.success(response.data?.message || "Field updated successfully");
       return {
         success: true,
         message: response.data?.message || "Field updated successfully",
       };
     } catch (error) {
       console.log(error);
+      toast.error(error.response?.data?.message || "Error updating field");
       return {
         success: false,
         message: error.response?.data?.message || "Error updating field",
+      };
+    }
+  };
+
+  const deleteField = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/v1/fields/delete/${id}`,
+        { withCredentials: true },
+      );
+
+      await fetchFields();
+      toast.success(response.data?.message || "Field deleted successfully");
+      return {
+        success: true,
+        message: response.data?.message || "Field deleted successfully",
+      };
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Error deleting field");
+      return {
+        success: false,
+        message: error.response?.data?.message || "Error deleting field",
       };
     }
   };
@@ -98,6 +126,7 @@ export const FieldProvider = ({ children }) => {
         fetchAgents,
         createField,
         updateField,
+        deleteField,
       }}
     >
       {children}

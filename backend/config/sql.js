@@ -4,7 +4,7 @@ const INSERT_USER_SQL =
 
 const USER_LOGIN_EXIST_SQL = "SELECT * FROM users WHERE name=? OR email=?";
 
-const USER_INFO_SQL = "SELECT id, name, email FROM users WHERE id = ?";
+const USER_INFO_SQL = "SELECT id, name, email, role FROM users WHERE id = ?";
 const USERS_LIST_SQL = "SELECT id, name, email FROM users ORDER BY name ASC";
 
 const INSERT_FIELD_SQL =

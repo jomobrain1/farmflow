@@ -4,7 +4,17 @@ import { FieldContext } from "../context/FieldContext.jsx";
 import "../assets/styles/Dashboard.css";
 
 function Fields() {
-  const { fields, loadingFields } = useContext(FieldContext);
+  const { fields, loadingFields, deleteField } = useContext(FieldContext);
+
+  const handleDelete = async (fieldId) => {
+    const confirmed = window.confirm("Delete this field?");
+
+    if (!confirmed) {
+      return;
+    }
+
+    await deleteField(fieldId);
+  };
 
   return (
     <main className="dashboard-page">
@@ -63,6 +73,13 @@ function Fields() {
               <Link to={`/fields/edit/${field.id}`} className="field-card__button">
                 Edit
               </Link>
+              <button
+                type="button"
+                className="field-card__button field-card__button--ghost field-card__button--danger"
+                onClick={() => handleDelete(field.id)}
+              >
+                Delete
+              </button>
             </div>
           </article>
         ))}

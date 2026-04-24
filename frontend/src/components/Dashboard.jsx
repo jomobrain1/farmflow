@@ -4,9 +4,23 @@ import "../assets/styles/Dashboard.css";
 import { FieldContext } from "../context/FieldContext.jsx";
 
 function Dashboard() {
-  const { fields, loadingFields } = useContext(FieldContext);
-  const atRiskCount = fields.filter((field) => field.status === "At Risk").length;
-  const activeCount = fields.filter((field) => field.status === "Active").length;
+  const { fields, loadingFields, deleteField } = useContext(FieldContext);
+  const atRiskCount = fields.filter(
+    (field) => field.status === "At Risk",
+  ).length;
+  const activeCount = fields.filter(
+    (field) => field.status === "Active",
+  ).length;
+
+  const handleDelete = async (fieldId) => {
+    const confirmed = window.confirm("Delete this field?");
+
+    if (!confirmed) {
+      return;
+    }
+
+    await deleteField(fieldId);
+  };
 
   return (
     <main className="dashboard-page">
@@ -82,9 +96,19 @@ function Dashboard() {
               </dl>
 
               <div className="field-card__actions">
-                <Link to={`/fields/edit/${field.id}`} className="field-card__button">
+                <Link
+                  to={`/fields/edit/${field.id}`}
+                  className="field-card__button"
+                >
                   Edit
                 </Link>
+                <button
+                  type="button"
+                  className="field-card__button field-card__button--ghost field-card__button--danger"
+                  onClick={() => handleDelete(field.id)}
+                >
+                  Delete
+                </button>
               </div>
             </article>
           ))}

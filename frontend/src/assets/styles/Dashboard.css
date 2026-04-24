@@ -191,21 +191,24 @@
 
 .field-card__actions {
   display: flex;
-  gap: 0.65rem;
+  justify-content: space-between;
+  gap: 1.25rem;
   margin-top: auto;
+  padding-top: 0.8rem;
 }
 
 .field-card__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
-  padding: 0.65rem 0.9rem;
+  min-height: 28px;
+  min-width: 64px;
+  padding: 0.35rem 0.65rem;
   border: none;
   border-radius: 0.25rem;
   background: #1c1917;
   color: #ffffff;
-  font-size: 0.88rem;
+  font-size: 0.76rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -214,6 +217,12 @@
   border: 1px solid #d6d3d1;
   background: #ffffff;
   color: #171717;
+}
+
+.field-card__button--danger {
+  border-color: #efb3b3;
+  background: #fff7f7;
+  color: #b42318;
 }
 
 .dashboard-empty {
@@ -257,5 +266,6 @@
 
   .field-card__actions {
     flex-direction: column;
+    gap: 0.7rem;
   }
 }

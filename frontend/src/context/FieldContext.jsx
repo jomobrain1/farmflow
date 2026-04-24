@@ -46,6 +46,28 @@ export const FieldProvider = ({ children }) => {
     }
   };
 
+  const updateField = async (id, fieldData) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/v1/fields/update/${id}`,
+        fieldData,
+        { withCredentials: true },
+      );
+
+      await fetchFields();
+      return {
+        success: true,
+        message: response.data?.message || "Field updated successfully",
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        success: false,
+        message: error.response?.data?.message || "Error updating field",
+      };
+    }
+  };
+
   const fetchAgents = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/v1/agents", {
@@ -75,6 +97,7 @@ export const FieldProvider = ({ children }) => {
         fetchFields,
         fetchAgents,
         createField,
+        updateField,
       }}
     >
       {children}

@@ -3,8 +3,7 @@
   top: 0;
   z-index: 20;
   padding: 1.1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background: #ffffff;
   border-bottom: 1px solid #e7e5e4;
 }
 
@@ -37,7 +36,7 @@
   width: 2.75rem;
   height: 2.75rem;
   border: 1px solid #d6d3d1;
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
   background: #ffffff;
   padding: 0;
   align-items: center;
@@ -65,7 +64,7 @@
   color: #525252;
   text-decoration: none;
   padding: 0.65rem 0.95rem;
-  border-radius: 0.45rem;
+  border-radius: 0.25rem;
   font-size: 0.95rem;
   font-weight: 500;
   font-family: inherit;
@@ -83,7 +82,7 @@
 
 .navbar__link--active {
   color: #111827;
-  background: #f5f5f4;
+  background: #f7f7f7;
 }
 
 .navbar__link--button {

@@ -28,7 +28,7 @@
 .dashboard-hero__action {
   flex-shrink: 0;
   border: 1px solid #d6d3d1;
-  border-radius: 0.35rem;
+  border-radius: 0.25rem;
   padding: 0.68rem 0.9rem;
   color: #171717;
   background: #ffffff;
@@ -46,8 +46,8 @@
 .dashboard-stat {
   padding: 1rem;
   border: 1px solid #e7e5e4;
-  border-radius: 0.45rem;
-  background: #fbfbfa;
+  border-radius: 0.25rem;
+  background: #ffffff;
   text-align: left;
 }
 
@@ -101,10 +101,9 @@
   gap: 1rem;
   padding: 1rem;
   border: 1px solid #e7e5e4;
-  border-radius: 0.45rem;
+  border-radius: 0.25rem;
   background: #ffffff;
   text-align: left;
-  box-shadow: 0 12px 24px rgba(23, 23, 23, 0.04);
 }
 
 .field-card__top {
@@ -132,8 +131,8 @@
   justify-content: center;
   padding: 0.28rem 0.48rem;
   border: 1px solid #e7e5e4;
-  border-radius: 0.28rem;
-  background: #fafaf9;
+  border-radius: 0.2rem;
+  background: #ffffff;
   color: #44403c;
   font-size: 0.76rem;
   font-weight: 600;
@@ -185,7 +184,7 @@
   min-height: 38px;
   padding: 0.65rem 0.9rem;
   border: none;
-  border-radius: 0.35rem;
+  border-radius: 0.25rem;
   background: #1c1917;
   color: #ffffff;
   font-size: 0.88rem;
@@ -203,8 +202,8 @@
   margin: 0;
   padding: 1rem;
   border: 1px solid #e7e5e4;
-  border-radius: 0.45rem;
-  background: #fbfbfa;
+  border-radius: 0.25rem;
+  background: #ffffff;
   color: #57534e;
 }
 

@@ -2,9 +2,12 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/Dashboard.css";
 import { FieldContext } from "../context/FieldContext.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
 
 function Dashboard() {
   const { fields, loadingFields, deleteField } = useContext(FieldContext);
+  const { user } = useContext(AuthContext);
+  const isAdmin = user?.role === "admin";
   const atRiskCount = fields.filter(
     (field) => field.status === "At Risk",
   ).length;
@@ -102,13 +105,15 @@ function Dashboard() {
                 >
                   Edit
                 </Link>
-                <button
-                  type="button"
-                  className="field-card__button field-card__button--ghost field-card__button--danger"
-                  onClick={() => handleDelete(field.id)}
-                >
-                  Delete
-                </button>
+                {isAdmin && (
+                  <button
+                    type="button"
+                    className="field-card__button field-card__button--ghost field-card__button--danger"
+                    onClick={() => handleDelete(field.id)}
+                  >
+                    Delete
+                  </button>
+                )}
               </div>
             </article>
           ))}

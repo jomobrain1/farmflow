@@ -31,9 +31,30 @@ function App() {
           path="/signup"
           element={user ? <Navigate to="/" /> : <Signup />}
         />
-        <Route path="/fields" element={<Fields />} />
-        <Route path="/fields/create" element={<CreateField />} />
-        <Route path="/fields/edit/:id" element={<EditField />} />
+        <Route
+          path="/fields"
+          element={
+            <ProtectedRoute>
+              <Fields />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/fields/create"
+          element={
+            <ProtectedRoute>
+              <CreateField />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/fields/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditField />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

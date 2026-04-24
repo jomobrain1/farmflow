@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FieldContext } from "../context/FieldContext.jsx";
 import "../assets/styles/FieldForm.css";
+import LoggedInGreeting from "./LoggedInGreeting.jsx";
 
 function EditField() {
   const { id } = useParams();
@@ -76,6 +77,7 @@ function EditField() {
 
   return (
     <main className="field-form-page">
+      <LoggedInGreeting />
       <section className="field-form-card">
         <p className="field-form-card__eyebrow">Fields</p>
         <h1 className="field-form-card__title">Edit field</h1>

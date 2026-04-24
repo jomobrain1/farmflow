@@ -110,6 +110,18 @@ const updateField = async (req, res) => {
     }
 
     const existingField = fieldExists[0];
+    const isAdmin = req.user.role === "admin";
+    const isAssignedAgent =
+      Number(existingField.assigned_agent_id) === Number(req.user.id);
+
+    if (!isAdmin && !isAssignedAgent) {
+      return sendResponse(
+        res,
+        403,
+        false,
+        "Not authorized to update this field",
+      );
+    }
 
     const updatedName = name ?? existingField.name;
     const updatedCropType = crop_type ?? existingField.crop_type;

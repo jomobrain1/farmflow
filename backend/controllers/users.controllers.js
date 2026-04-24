@@ -51,7 +51,7 @@ const loginUsers = async (req, res) => {
     if (!passwordMatches) {
       return sendResponse(res, 400, false, "Invalid Password");
     }
-    const token = jwt.sign({ id: user.id }, JWT_SECRET, {
+    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
       expiresIn: JWT_EXPIRES,
     });
 

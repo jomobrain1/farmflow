@@ -10,10 +10,22 @@ const USERS_LIST_SQL = "SELECT id, name, email FROM users ORDER BY name ASC";
 const INSERT_FIELD_SQL =
   "INSERT INTO fields (name, crop_type, planting_date, current_stage, assigned_agent_id, created_by) VALUES (?, ?, ?, ?, ?, ?)";
 
-const GET_FIELDS_SQL = "SELECT * FROM fields ORDER BY id DESC";
+const GET_FIELDS_SQL = `
+  SELECT
+    fields.*,
+    users.name AS assigned_agent_name
+  FROM fields
+  LEFT JOIN users ON fields.assigned_agent_id = users.id
+  ORDER BY fields.id DESC
+`;
 
 const GET_SINGLE_FIELD_SQL = `
-  SELECT * FROM fields WHERE id = ?
+  SELECT
+    fields.*,
+    users.name AS assigned_agent_name
+  FROM fields
+  LEFT JOIN users ON fields.assigned_agent_id = users.id
+  WHERE fields.id = ?
 `;
 
 const UPDATE_FIELD_SQL = `

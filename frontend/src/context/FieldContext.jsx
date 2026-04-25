@@ -101,7 +101,8 @@ export const FieldProvider = ({ children }) => {
       const response = await axios.get(apiUrl("/api/v1/agents"), {
         withCredentials: true,
       });
-      setAgents(Array.isArray(response.data) ? response.data : []);
+      const fetchedUsers = Array.isArray(response.data) ? response.data : [];
+      setAgents(fetchedUsers.filter((user) => user.role === "agent"));
     } catch (error) {
       console.log(error);
       setAgents([]);

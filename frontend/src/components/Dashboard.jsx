@@ -131,10 +131,16 @@ function Dashboard() {
           </Link>
         </div>
 
+        {!isAdmin ? (
+          <p className="dashboard-section__note">Fields assigned to you</p>
+        ) : null}
+
         <div className="field-grid">
           {loadingFields ? <p>Loading fields...</p> : null}
           {!loadingFields && visibleFields.length === 0 ? (
-            <p className="dashboard-empty">No fields yet.</p>
+            <p className="dashboard-empty">
+              {isAdmin ? "No fields yet." : "No fields assigned yet."}
+            </p>
           ) : null}
           {visibleFields.map((field) => {
             const canEdit =

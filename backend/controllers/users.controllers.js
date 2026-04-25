@@ -12,6 +12,10 @@ const {
 } = require("../config/sql");
 const sendResponse = require("../config/response");
 const { JWT_SECRET, JWT_EXPIRES, COOKIE_EXPIRES } = require("../config/constants");
+
+const COOKIE_EXPIRES_DAYS = Number(COOKIE_EXPIRES || 7);
+const TOKEN_EXPIRES = JWT_EXPIRES || "7d";
+
 const registerUsers = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -39,6 +43,10 @@ const registerUsers = async (req, res) => {
 // Login controller
 const loginUsers = async (req, res) => {
   try {
+    if (!JWT_SECRET) {
+      return sendResponse(res, 500, false, "Server auth configuration error");
+    }
+
     const { name, email, password } = req.body;
     const [users] = await db.query(USER_LOGIN_EXIST_SQL, [name, email]);
     console.log(users[0]);
@@ -54,7 +62,7 @@ const loginUsers = async (req, res) => {
       return sendResponse(res, 400, false, "Invalid Password");
     }
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES,
+      expiresIn: TOKEN_EXPIRES,
     });
 
     res.cookie("token", token, {
@@ -62,7 +70,7 @@ const loginUsers = async (req, res) => {
       sameSite: "none",
       secure: true,
       expires: new Date(
-        Date.now() + COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
+        Date.now() + COOKIE_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
       ),
     });
 

@@ -14,6 +14,8 @@ function Dashboard() {
   const { user } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
+  const [fieldUpdates, setFieldUpdates] = useState([]);
+  const [loadingFieldUpdates, setLoadingFieldUpdates] = useState(true);
   const isAdmin = user?.role === "admin";
   const visibleFields = isAdmin
     ? fields
@@ -30,9 +32,12 @@ function Dashboard() {
   useEffect(() => {
     if (isAdmin) {
       fetchUsers();
+      fetchFieldUpdates();
     } else {
       setUsers([]);
       setLoadingUsers(false);
+      setFieldUpdates([]);
+      setLoadingFieldUpdates(false);
     }
   }, [isAdmin]);
 
@@ -47,6 +52,20 @@ function Dashboard() {
       setUsers([]);
     } finally {
       setLoadingUsers(false);
+    }
+  };
+
+  const fetchFieldUpdates = async () => {
+    try {
+      const response = await axios.get(apiUrl("/api/v1/fields/updates"), {
+        withCredentials: true,
+      });
+      setFieldUpdates(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.log(error);
+      setFieldUpdates([]);
+    } finally {
+      setLoadingFieldUpdates(false);
     }
   };
 
@@ -226,6 +245,47 @@ function Dashboard() {
                           Delete
                         </button>
                       </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {isAdmin ? (
+        <section className="dashboard-section">
+          <div className="dashboard-section__header">
+            <h2 className="dashboard-section__title">Field updates</h2>
+          </div>
+
+          {loadingFieldUpdates ? <p>Loading updates...</p> : null}
+          {!loadingFieldUpdates && fieldUpdates.length === 0 ? (
+            <p className="dashboard-empty">No field updates found.</p>
+          ) : null}
+          {!loadingFieldUpdates && fieldUpdates.length > 0 ? (
+            <div className="users-table-wrap">
+              <table className="users-table">
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Agent</th>
+                    <th>Stage</th>
+                    <th>Notes</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {fieldUpdates.map((update) => (
+                    <tr key={update.id}>
+                      <td>{update.field_name}</td>
+                      <td>{update.agent_name}</td>
+                      <td>{update.stage}</td>
+                      <td className="users-table__notes">
+                        {update.notes?.trim() || "-"}
+                      </td>
+                      <td>{update.created_at?.slice(0, 10) ?? "-"}</td>
                     </tr>
                   ))}
                 </tbody>

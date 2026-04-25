@@ -269,6 +269,13 @@
   color: #171717;
 }
 
+.users-table__notes {
+  min-width: 220px;
+  max-width: 320px;
+  white-space: normal;
+  line-height: 1.45;
+}
+
 .users-table tbody tr:last-child td {
   border-bottom: none;
 }

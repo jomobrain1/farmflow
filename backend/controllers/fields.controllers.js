@@ -7,6 +7,7 @@ const {
   GET_SINGLE_FIELD_SQL,
   UPDATE_FIELD_SQL,
   INSERT_FIELD_UPDATE_SQL,
+  GET_FIELD_UPDATES_SQL,
   DELETE_FIELD_SQL,
 } = require("../config/sql");
 
@@ -170,6 +171,20 @@ const updateField = async (req, res) => {
   }
 };
 
+const getFieldUpdates = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return sendResponse(res, 403, false, "Not authorized");
+    }
+
+    const [updates] = await db.query(GET_FIELD_UPDATES_SQL);
+    return res.json(updates);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, false, "Error fetching field updates");
+  }
+};
+
 // delete field
 const deleteField = async (req, res) => {
   try {
@@ -194,4 +209,10 @@ const deleteField = async (req, res) => {
   }
 };
 
-module.exports = { createField, getAllFields, updateField, deleteField };
+module.exports = {
+  createField,
+  getAllFields,
+  updateField,
+  getFieldUpdates,
+  deleteField,
+};

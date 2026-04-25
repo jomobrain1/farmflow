@@ -53,6 +53,22 @@ const INSERT_FIELD_UPDATE_SQL = `
   VALUES (?, ?, ?, ?)
 `;
 
+const GET_FIELD_UPDATES_SQL = `
+  SELECT
+    field_updates.id,
+    field_updates.field_id,
+    fields.name AS field_name,
+    field_updates.agent_id,
+    users.name AS agent_name,
+    field_updates.stage,
+    field_updates.notes,
+    field_updates.created_at
+  FROM field_updates
+  INNER JOIN fields ON field_updates.field_id = fields.id
+  INNER JOIN users ON field_updates.agent_id = users.id
+  ORDER BY field_updates.created_at DESC
+`;
+
 const DELETE_FIELD_SQL = `
   DELETE FROM fields WHERE id = ?
 `;
@@ -70,5 +86,6 @@ module.exports = {
   GET_SINGLE_FIELD_SQL,
   UPDATE_FIELD_SQL,
   INSERT_FIELD_UPDATE_SQL,
+  GET_FIELD_UPDATES_SQL,
   DELETE_FIELD_SQL,
 };

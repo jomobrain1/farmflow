@@ -9,7 +9,7 @@ const DB_DATABASE = process.env.DB_DATABASE;
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES = process.env.JWT_EXPIRES;
 const COOKIE_EXPIRES = process.env.COOKIE_EXPIRES;
-const FRONTEND_URL = process.env.FRONTEND_URL;
+const FRONTEND_URL = "https://farmflow-srecords.vercel.app";
 module.exports = {
   PORT,
   DB_HOST,

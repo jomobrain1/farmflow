@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { apiUrl } from "../utils/api";
 
 export const AuthContext = createContext(null);
 
@@ -9,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/v1/auth/me", {
+      const response = await axios.get(apiUrl("/api/v1/auth/me"), {
         withCredentials: true,
       });
 
@@ -25,14 +26,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/v1/auth/login",
-        userData,
-        { withCredentials: true },
-      );
+      const response = await axios.post(apiUrl("/api/v1/auth/login"), userData, {
+        withCredentials: true,
+      });
 
       if (response.data.message === "Login Successful!") {
-        fetchUser();
+        await fetchUser();
         return true;
       }
 
@@ -46,11 +45,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post(
-        "http://localhost:5000/api/v1/auth/logout",
-        {},
-        { withCredentials: true },
-      );
+      await axios.post(apiUrl("/api/v1/auth/logout"), {}, { withCredentials: true });
     } catch (error) {
       console.log(error);
     } finally {

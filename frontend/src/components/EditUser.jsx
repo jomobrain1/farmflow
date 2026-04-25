@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import LoggedInGreeting from "./LoggedInGreeting.jsx";
 import "../assets/styles/FieldForm.css";
+import { apiUrl } from "../utils/api";
 
 function EditUser() {
   const { id } = useParams();
@@ -20,10 +21,9 @@ function EditUser() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/v1/agents/${id}`,
-          { withCredentials: true },
-        );
+        const response = await axios.get(apiUrl(`/api/v1/agents/${id}`), {
+          withCredentials: true,
+        });
 
         setFormData({
           name: response.data.name || "",
@@ -55,11 +55,9 @@ function EditUser() {
     setError("");
 
     try {
-      const response = await axios.put(
-        `http://localhost:5000/api/v1/agents/${id}`,
-        formData,
-        { withCredentials: true },
-      );
+      const response = await axios.put(apiUrl(`/api/v1/agents/${id}`), formData, {
+        withCredentials: true,
+      });
 
       toast.success(response.data?.message || "User updated successfully");
       navigate("/");

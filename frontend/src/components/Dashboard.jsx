@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext.jsx";
 import LoggedInGreeting from "./LoggedInGreeting.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { apiUrl } from "../utils/api";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function Dashboard() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/v1/agents", {
+      const response = await axios.get(apiUrl("/api/v1/agents"), {
         withCredentials: true,
       });
       setUsers(Array.isArray(response.data) ? response.data : []);
@@ -54,10 +55,9 @@ function Dashboard() {
     if (!confirmed) return;
 
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/v1/agents/${listedUser.id}`,
-        { withCredentials: true },
-      );
+      const response = await axios.delete(apiUrl(`/api/v1/agents/${listedUser.id}`), {
+        withCredentials: true,
+      });
       toast.success(response.data?.message || "User deleted successfully");
       fetchUsers();
     } catch (error) {

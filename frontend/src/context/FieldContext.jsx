@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { apiUrl } from "../utils/api";
 
 export const FieldContext = createContext(null);
 
@@ -12,7 +13,7 @@ export const FieldProvider = ({ children }) => {
 
   const fetchFields = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/v1/fields");
+      const response = await axios.get(apiUrl("/api/v1/fields"));
       setFields(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       if (error.response?.status === 404) {
@@ -28,7 +29,7 @@ export const FieldProvider = ({ children }) => {
   const createField = async (fieldData) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/fields/create",
+        apiUrl("/api/v1/fields/create"),
         fieldData,
         { withCredentials: true },
       );
@@ -52,7 +53,7 @@ export const FieldProvider = ({ children }) => {
   const updateField = async (id, fieldData) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/v1/fields/update/${id}`,
+        apiUrl(`/api/v1/fields/update/${id}`),
         fieldData,
         { withCredentials: true },
       );
@@ -75,10 +76,9 @@ export const FieldProvider = ({ children }) => {
 
   const deleteField = async (id) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/v1/fields/delete/${id}`,
-        { withCredentials: true },
-      );
+      const response = await axios.delete(apiUrl(`/api/v1/fields/delete/${id}`), {
+        withCredentials: true,
+      });
 
       await fetchFields();
       toast.success(response.data?.message || "Field deleted successfully");
@@ -98,7 +98,7 @@ export const FieldProvider = ({ children }) => {
 
   const fetchAgents = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/v1/agents", {
+      const response = await axios.get(apiUrl("/api/v1/agents"), {
         withCredentials: true,
       });
       setAgents(Array.isArray(response.data) ? response.data : []);

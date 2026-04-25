@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../assets/styles/AuthForm.css";
 import axios from "axios";
+import { apiUrl } from "../utils/api";
 
 function Signup() {
   const [error, setError] = useState();
@@ -24,10 +25,10 @@ function Signup() {
     event.preventDefault();
     console.log("Signup form submitted:", formData);
     try {
-      await axios.post("http://localhost:5000/api/v1/auth/register", formData, {
+      await axios.post(apiUrl("/api/v1/auth/register"), formData, {
         withCredentials: true,
       });
-      navigate("/")
+      navigate("/");
     } catch (error) {
       console.log(error);
 

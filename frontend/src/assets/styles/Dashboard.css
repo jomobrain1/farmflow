@@ -66,6 +66,7 @@
 
 .dashboard-section {
   text-align: left;
+  margin-top: 1.5rem;
 }
 
 .dashboard-section__header {
@@ -73,13 +74,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.85rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e7e5e4;
 }
 
 .dashboard-section__title {
   margin: 0;
   color: #171717;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
 }
 
@@ -232,6 +235,69 @@
   border-radius: 0.25rem;
   background: #ffffff;
   color: #57534e;
+}
+
+.users-table-wrap {
+  width: min(100%, 920px);
+  margin: 0 auto;
+  overflow-x: auto;
+  border: 1px solid #e7e5e4;
+  border-radius: 0.25rem;
+  background: #ffffff;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.users-table th,
+.users-table td {
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid #f0eeeb;
+  font-size: 0.82rem;
+}
+
+.users-table th {
+  color: #57534e;
+  font-weight: 700;
+  background: #fafaf9;
+}
+
+.users-table td {
+  color: #171717;
+}
+
+.users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.users-table__role {
+  text-transform: capitalize;
+}
+
+.users-table__actions {
+  display: flex;
+  gap: 0.55rem;
+}
+
+.users-table__button {
+  min-height: 26px;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid #d6d3d1;
+  border-radius: 0.2rem;
+  background: #ffffff;
+  color: #171717;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.users-table__button--danger {
+  border-color: #efb3b3;
+  color: #b42318;
+  background: #fff7f7;
 }
 
 @media (max-width: 900px) {

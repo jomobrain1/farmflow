@@ -4,10 +4,12 @@ import Navbar from "./components/Navbar";
 import Fields from "./components/Fields";
 import CreateField from "./components/CreateField";
 import EditField from "./components/EditField";
+import EditUser from "./components/EditUser";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import AdminRoute from "./utils/AdminRoute";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 
@@ -53,6 +55,14 @@ function App() {
             <ProtectedRoute>
               <EditField />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users/edit/:id"
+          element={
+            <AdminRoute>
+              <EditUser />
+            </AdminRoute>
           }
         />
       </Routes>

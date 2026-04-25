@@ -1,13 +1,18 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../assets/styles/Dashboard.css";
 import { FieldContext } from "../context/FieldContext.jsx";
 import { AuthContext } from "../context/AuthContext.jsx";
 import LoggedInGreeting from "./LoggedInGreeting.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const { fields, loadingFields, deleteField } = useContext(FieldContext);
   const { user } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
   const isAdmin = user?.role === "admin";
   const atRiskCount = fields.filter(
     (field) => field.status === "At Risk",
@@ -15,6 +20,24 @@ function Dashboard() {
   const activeCount = fields.filter(
     (field) => field.status === "Active",
   ).length;
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/v1/agents", {
+        withCredentials: true,
+      });
+      setUsers(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.log(error);
+      setUsers([]);
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
 
   const handleDelete = async (fieldId) => {
     const confirmed = window.confirm("Delete this field?");
@@ -24,6 +47,23 @@ function Dashboard() {
     }
 
     await deleteField(fieldId);
+  };
+
+  const handleDeleteUser = async (listedUser) => {
+    const confirmed = window.confirm(`Delete ${listedUser.name}?`);
+    if (!confirmed) return;
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/v1/agents/${listedUser.id}`,
+        { withCredentials: true },
+      );
+      toast.success(response.data?.message || "User deleted successfully");
+      fetchUsers();
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Error deleting user");
+    }
   };
 
   return (
@@ -127,6 +167,60 @@ function Dashboard() {
             );
           })}
         </div>
+      </section>
+
+      <section className="dashboard-section">
+        <div className="dashboard-section__header">
+          <h2 className="dashboard-section__title">Users</h2>
+        </div>
+
+        {loadingUsers ? <p>Loading users...</p> : null}
+        {!loadingUsers && users.length === 0 ? (
+          <p className="dashboard-empty">No users found.</p>
+        ) : null}
+        {!loadingUsers && users.length > 0 ? (
+          <div className="users-table-wrap">
+            <table className="users-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                  {isAdmin ? <th>Actions</th> : null}
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((listedUser) => (
+                  <tr key={listedUser.id}>
+                    <td>{listedUser.name}</td>
+                    <td>{listedUser.email}</td>
+                    <td className="users-table__role">{listedUser.role}</td>
+                    <td>{listedUser.created_at?.slice(0, 10) ?? "-"}</td>
+                    {isAdmin ? (
+                      <td className="users-table__actions">
+                        <button
+                          type="button"
+                          className="users-table__button"
+                          onClick={() => navigate(`/users/edit/${listedUser.id}`)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="users-table__button users-table__button--danger"
+                          onClick={() => handleDeleteUser(listedUser)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    ) : null}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
       </section>
     </main>
   );

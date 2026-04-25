@@ -7,6 +7,8 @@ const {
   USER_LOGIN_EXIST_SQL,
   USER_INFO_SQL,
   USERS_LIST_SQL,
+  UPDATE_USER_SQL,
+  DELETE_USER_SQL,
 } = require("../config/sql");
 const sendResponse = require("../config/response");
 const { JWT_SECRET, JWT_EXPIRES } = require("../config/constants");
@@ -101,6 +103,67 @@ const getUsersList = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return sendResponse(res, 403, false, "Not authorized");
+    }
+
+    const { id } = req.params;
+    const [users] = await db.query(USER_INFO_SQL, [id]);
+
+    if (users.length === 0) {
+      return sendResponse(res, 404, false, "User not found");
+    }
+
+    return res.json(users[0]);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, false, "Error fetching user");
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return sendResponse(res, 403, false, "Not authorized");
+    }
+
+    const { id } = req.params;
+    const { name, email, role } = req.body;
+
+    if (!name || !email || !role) {
+      return sendResponse(res, 400, false, "Name, email and role are required");
+    }
+
+    await db.query(UPDATE_USER_SQL, [name, email, role, id]);
+    return sendResponse(res, 200, true, "User updated successfully");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, false, "Error updating user");
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return sendResponse(res, 403, false, "Not authorized");
+    }
+
+    const { id } = req.params;
+
+    if (Number(id) === Number(req.user.id)) {
+      return sendResponse(res, 400, false, "You cannot delete your own account");
+    }
+
+    await db.query(DELETE_USER_SQL, [id]);
+    return sendResponse(res, 200, true, "User deleted successfully");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, false, "Error deleting user");
+  }
+};
+
 const logoutUser = async (req, res) => {
   try {
     res.clearCookie("token", {
@@ -119,5 +182,8 @@ module.exports = {
   loginUsers,
   getCurrentUser,
   getUsersList,
+  getUserById,
+  updateUser,
+  deleteUser,
   logoutUser,
 };

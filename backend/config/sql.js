@@ -5,7 +5,11 @@ const INSERT_USER_SQL =
 const USER_LOGIN_EXIST_SQL = "SELECT * FROM users WHERE name=? OR email=?";
 
 const USER_INFO_SQL = "SELECT id, name, email, role FROM users WHERE id = ?";
-const USERS_LIST_SQL = "SELECT id, name, email FROM users ORDER BY name ASC";
+const USERS_LIST_SQL =
+  "SELECT id, name, email, role, created_at FROM users ORDER BY name ASC";
+const UPDATE_USER_SQL =
+  "UPDATE users SET name = ?, email = ?, role = ? WHERE id = ?";
+const DELETE_USER_SQL = "DELETE FROM users WHERE id = ?";
 
 const INSERT_FIELD_SQL =
   "INSERT INTO fields (name, crop_type, planting_date, current_stage, assigned_agent_id, created_by) VALUES (?, ?, ?, ?, ?, ?)";
@@ -48,6 +52,8 @@ module.exports = {
   USER_LOGIN_EXIST_SQL,
   USER_INFO_SQL,
   USERS_LIST_SQL,
+  UPDATE_USER_SQL,
+  DELETE_USER_SQL,
   INSERT_FIELD_SQL,
   GET_FIELDS_SQL,
   GET_SINGLE_FIELD_SQL,

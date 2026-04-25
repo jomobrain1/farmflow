@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { PORT } = require("./config/constants");
+const { PORT, FRONTEND_URL } = require("./config/constants");
 const app = express();
 const usersRoutes = require("./routes/users.routes");
 const agentsRoutes = require("./routes/agents.routes");
@@ -11,7 +11,7 @@ const cookieParser = require("cookie-parser");
 // Middlewares
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: FRONTEND_URL,
     credentials: true,
   }),
 );
@@ -29,7 +29,10 @@ app.get("/", (req, res) => {
   });
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log("App is running in port", PORT);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log("App is running in port", PORT);
+  });
+}
+
+module.exports = app;

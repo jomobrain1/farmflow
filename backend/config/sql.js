@@ -23,6 +23,16 @@ const GET_FIELDS_SQL = `
   ORDER BY fields.id DESC
 `;
 
+const GET_RECENT_FIELDS_SQL = `
+  SELECT
+    fields.*,
+    users.name AS assigned_agent_name
+  FROM fields
+  LEFT JOIN users ON fields.assigned_agent_id = users.id
+  ORDER BY fields.id DESC
+  LIMIT 6
+`;
+
 const GET_SINGLE_FIELD_SQL = `
   SELECT
     fields.*,
@@ -56,6 +66,7 @@ module.exports = {
   DELETE_USER_SQL,
   INSERT_FIELD_SQL,
   GET_FIELDS_SQL,
+  GET_RECENT_FIELDS_SQL,
   GET_SINGLE_FIELD_SQL,
   UPDATE_FIELD_SQL,
   INSERT_FIELD_UPDATE_SQL,

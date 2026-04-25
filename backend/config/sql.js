@@ -34,6 +34,11 @@ const UPDATE_FIELD_SQL = `
   WHERE id = ?
 `;
 
+const INSERT_FIELD_UPDATE_SQL = `
+  INSERT INTO field_updates (field_id, agent_id, stage, notes)
+  VALUES (?, ?, ?, ?)
+`;
+
 const DELETE_FIELD_SQL = `
   DELETE FROM fields WHERE id = ?
 `;
@@ -47,5 +52,6 @@ module.exports = {
   GET_FIELDS_SQL,
   GET_SINGLE_FIELD_SQL,
   UPDATE_FIELD_SQL,
+  INSERT_FIELD_UPDATE_SQL,
   DELETE_FIELD_SQL,
 };

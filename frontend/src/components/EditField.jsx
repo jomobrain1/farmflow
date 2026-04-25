@@ -17,6 +17,7 @@ function EditField() {
     planting_date: "",
     current_stage: "Planted",
     assigned_agent_id: "",
+    notes: "",
   });
 
   useEffect(() => {
@@ -34,6 +35,7 @@ function EditField() {
       assigned_agent_id: existingField.assigned_agent_id
         ? String(existingField.assigned_agent_id)
         : "",
+      notes: "",
     });
   }, [fields, id]);
 
@@ -155,6 +157,19 @@ function EditField() {
                 </option>
               ))}
             </select>
+          </label>
+
+          <label className="field-form__group" htmlFor="notes">
+            <span className="field-form__label">Notes</span>
+            <textarea
+              id="notes"
+              name="notes"
+              className="field-form__input field-form__textarea"
+              value={formData.notes}
+              onChange={handleChange}
+              placeholder="Add notes or observations"
+              rows="4"
+            />
           </label>
 
           <button

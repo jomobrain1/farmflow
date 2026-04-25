@@ -6,6 +6,7 @@ const {
   GET_FIELDS_SQL,
   GET_SINGLE_FIELD_SQL,
   UPDATE_FIELD_SQL,
+  INSERT_FIELD_UPDATE_SQL,
   DELETE_FIELD_SQL,
 } = require("../config/sql");
 
@@ -99,8 +100,14 @@ const getAllFields = async (req, res) => {
 const updateField = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, crop_type, planting_date, current_stage, assigned_agent_id } =
-      req.body;
+    const {
+      name,
+      crop_type,
+      planting_date,
+      current_stage,
+      assigned_agent_id,
+      notes,
+    } = req.body;
 
     const [fieldExists] = await db.query(GET_SINGLE_FIELD_SQL, [id]);
     console.log(fieldExists);
@@ -138,6 +145,15 @@ const updateField = async (req, res) => {
       updatedAssignedAgentId,
       id,
     ]);
+
+    if (req.user.role === "agent") {
+      await db.query(INSERT_FIELD_UPDATE_SQL, [
+        id,
+        req.user.id,
+        updatedCurrentStage,
+        notes || null,
+      ]);
+    }
 
     const [updatedFieldRows] = await db.query(GET_SINGLE_FIELD_SQL, [id]);
 

@@ -133,9 +133,9 @@ function EditField() {
               onChange={handleChange}
             >
               <option value="Planted">Planted</option>
-              <option value="Vegetative">Vegetative</option>
-              <option value="Flowering">Flowering</option>
-              <option value="Harvest">Harvest</option>
+              <option value="Growing">Growing</option>
+              <option value="Ready">Ready</option>
+              <option value="Harvested">Harvested</option>
             </select>
           </label>
 

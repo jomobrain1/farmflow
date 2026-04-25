@@ -13,7 +13,7 @@ const {
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 const getFieldStatus = (field) => {
-  if (field.current_stage === "Harvest") {
+  if (field.current_stage === "Harvested") {
     return "Completed";
   }
 
@@ -23,7 +23,7 @@ const getFieldStatus = (field) => {
 
   if (
     (field.current_stage === "Planted" && ageInDays > 14) ||
-    (field.current_stage === "Vegetative" && ageInDays > 45)
+    (field.current_stage === "Growing" && ageInDays > 45)
   ) {
     return "At Risk";
   }

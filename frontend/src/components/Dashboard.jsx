@@ -15,16 +15,26 @@ function Dashboard() {
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const isAdmin = user?.role === "admin";
-  const atRiskCount = fields.filter(
+  const visibleFields = isAdmin
+    ? fields
+    : fields.filter(
+        (field) => Number(field.assigned_agent_id) === Number(user?.id),
+      );
+  const atRiskCount = visibleFields.filter(
     (field) => field.status === "At Risk",
   ).length;
-  const activeCount = fields.filter(
+  const activeCount = visibleFields.filter(
     (field) => field.status === "Active",
   ).length;
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    if (isAdmin) {
+      fetchUsers();
+    } else {
+      setUsers([]);
+      setLoadingUsers(false);
+    }
+  }, [isAdmin]);
 
   const fetchUsers = async () => {
     try {
@@ -72,15 +82,17 @@ function Dashboard() {
       <section className="dashboard-hero">
         <h1 className="dashboard-hero__title">Dashboard</h1>
 
-        <Link to="/fields/create" className="dashboard-hero__action">
-          Add field
-        </Link>
+        {isAdmin ? (
+          <Link to="/fields/create" className="dashboard-hero__action">
+            Add field
+          </Link>
+        ) : null}
       </section>
 
       <section className="dashboard-stats" aria-label="Field summary">
         <article className="dashboard-stat">
           <span className="dashboard-stat__label">Total fields</span>
-          <strong className="dashboard-stat__value">{fields.length}</strong>
+          <strong className="dashboard-stat__value">{visibleFields.length}</strong>
         </article>
         <article className="dashboard-stat">
           <span className="dashboard-stat__label">Active</span>
@@ -102,10 +114,10 @@ function Dashboard() {
 
         <div className="field-grid">
           {loadingFields ? <p>Loading fields...</p> : null}
-          {!loadingFields && fields.length === 0 ? (
+          {!loadingFields && visibleFields.length === 0 ? (
             <p className="dashboard-empty">No fields yet.</p>
           ) : null}
-          {fields.map((field) => {
+          {visibleFields.map((field) => {
             const canEdit =
               isAdmin || Number(field.assigned_agent_id) === Number(user?.id);
 
@@ -169,35 +181,35 @@ function Dashboard() {
         </div>
       </section>
 
-      <section className="dashboard-section">
-        <div className="dashboard-section__header">
-          <h2 className="dashboard-section__title">Users</h2>
-        </div>
+      {isAdmin ? (
+        <section className="dashboard-section">
+          <div className="dashboard-section__header">
+            <h2 className="dashboard-section__title">Users</h2>
+          </div>
 
-        {loadingUsers ? <p>Loading users...</p> : null}
-        {!loadingUsers && users.length === 0 ? (
-          <p className="dashboard-empty">No users found.</p>
-        ) : null}
-        {!loadingUsers && users.length > 0 ? (
-          <div className="users-table-wrap">
-            <table className="users-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Joined</th>
-                  {isAdmin ? <th>Actions</th> : null}
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((listedUser) => (
-                  <tr key={listedUser.id}>
-                    <td>{listedUser.name}</td>
-                    <td>{listedUser.email}</td>
-                    <td className="users-table__role">{listedUser.role}</td>
-                    <td>{listedUser.created_at?.slice(0, 10) ?? "-"}</td>
-                    {isAdmin ? (
+          {loadingUsers ? <p>Loading users...</p> : null}
+          {!loadingUsers && users.length === 0 ? (
+            <p className="dashboard-empty">No users found.</p>
+          ) : null}
+          {!loadingUsers && users.length > 0 ? (
+            <div className="users-table-wrap">
+              <table className="users-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((listedUser) => (
+                    <tr key={listedUser.id}>
+                      <td>{listedUser.name}</td>
+                      <td>{listedUser.email}</td>
+                      <td className="users-table__role">{listedUser.role}</td>
+                      <td>{listedUser.created_at?.slice(0, 10) ?? "-"}</td>
                       <td className="users-table__actions">
                         <button
                           type="button"
@@ -214,14 +226,14 @@ function Dashboard() {
                           Delete
                         </button>
                       </td>
-                    ) : null}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : null}
-      </section>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
     </main>
   );
 }

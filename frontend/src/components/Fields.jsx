@@ -9,6 +9,11 @@ function Fields() {
   const { fields, loadingFields, deleteField } = useContext(FieldContext);
   const { user } = useContext(AuthContext);
   const isAdmin = user?.role === "admin";
+  const visibleFields = isAdmin
+    ? fields
+    : fields.filter(
+        (field) => Number(field.assigned_agent_id) === Number(user?.id),
+      );
 
   const handleDelete = async (fieldId) => {
     const confirmed = window.confirm("Delete this field?");
@@ -25,17 +30,19 @@ function Fields() {
       <LoggedInGreeting />
       <section className="dashboard-hero">
         <h1 className="dashboard-hero__title">Fields</h1>
-        <Link to="/fields/create" className="dashboard-hero__action">
-          Add field
-        </Link>
+        {isAdmin ? (
+          <Link to="/fields/create" className="dashboard-hero__action">
+            Add field
+          </Link>
+        ) : null}
       </section>
 
       <div className="field-grid">
         {loadingFields ? <p>Loading fields...</p> : null}
-        {!loadingFields && fields.length === 0 ? (
+        {!loadingFields && visibleFields.length === 0 ? (
           <p className="dashboard-empty">No fields yet.</p>
         ) : null}
-        {fields.map((field) => {
+        {visibleFields.map((field) => {
           const canEdit =
             isAdmin || Number(field.assigned_agent_id) === Number(user?.id);
 

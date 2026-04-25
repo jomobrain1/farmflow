@@ -82,6 +82,22 @@ function Login() {
           </button>
         </form>
 
+        <section className="auth-demo-card" aria-label="Demo credentials">
+          <p className="auth-demo-card__title">Demo access</p>
+          <div className="auth-demo-card__row">
+            <span className="auth-demo-card__role">Admin</span>
+            <span className="auth-demo-card__value">admin@gmail.com</span>
+          </div>
+          <div className="auth-demo-card__row">
+            <span className="auth-demo-card__role">Agent</span>
+            <span className="auth-demo-card__value">agent@gmail.com</span>
+          </div>
+          <div className="auth-demo-card__row">
+            <span className="auth-demo-card__role">Password</span>
+            <span className="auth-demo-card__value">12345678</span>
+          </div>
+        </section>
+
         <p className="auth-card__switch">
           Not registered?{" "}
           <Link to="/signup" className="auth-card__link">

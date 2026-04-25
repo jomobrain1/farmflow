@@ -11,7 +11,7 @@ const {
   DELETE_USER_SQL,
 } = require("../config/sql");
 const sendResponse = require("../config/response");
-const { JWT_SECRET, JWT_EXPIRES } = require("../config/constants");
+const { JWT_SECRET, JWT_EXPIRES, COOKIE_EXPIRES } = require("../config/constants");
 const registerUsers = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -59,8 +59,10 @@ const loginUsers = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
       expires: new Date(
-        Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
+        Date.now() + COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
       ),
     });
 
@@ -168,6 +170,8 @@ const logoutUser = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
 
     return sendResponse(res, 200, true, "Logout successful");
